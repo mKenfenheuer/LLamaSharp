@@ -8,7 +8,7 @@ on:
         required: true
         default: 'master'
   push:
-    branches: [cron_job]
+    branches: [master]
   #schedule:
   #  - cron: "22 22 * * 2"
 concurrency:
