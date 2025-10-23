@@ -68,7 +68,7 @@ namespace LLama.Native
         /// <summary>
         ///  When to enable Flash Attention
         /// </summary>
-        public LLamaAttentionType flash_attn_type;
+        public LLamaFlashAttnType flash_attn_type;
 
         /// <summary>
         /// RoPE base frequency, 0 = from model

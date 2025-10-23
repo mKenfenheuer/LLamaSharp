@@ -10,6 +10,15 @@ namespace LLama.Native
     public static partial class NativeApi
     {
         /// <summary>
+        /// for backwards-compat
+        /// </summary>
+        public const uint LLAMA_STATE_SEQ_FLAGS_SWA_ONLY = 1;
+
+        /// <summary>
+        /// work only with partial states, such as SWA KV cache or recurrent cache (e.g. Mamba)
+        /// </summary>
+        public const uint LLAMA_STATE_SEQ_FLAGS_PARTIAL_ONLY = 1;
+        /// <summary>
         /// A method that does nothing. This is a native method, calling it will force the llama native dependencies to be loaded.
         /// </summary>
         /// <returns></returns>
@@ -126,6 +135,24 @@ namespace LLama.Native
         public static extern unsafe nuint llama_state_seq_load_file(SafeLLamaContextHandle ctx, string filepath, LLamaSeqId dest_seq_id, LLamaToken* tokens_out, nuint n_token_capacity, out nuint n_token_count_out);
 
         /// <summary>
+        /// Get the size needed for sequence state with extended flags
+        /// </summary>
+        [DllImport(libraryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern nuint llama_state_seq_get_size_ext(SafeLLamaContextHandle ctx, LLamaSeqId seq_id, uint flags);
+
+        /// <summary>
+        /// Get sequence state data with extended flags
+        /// </summary>
+        [DllImport(libraryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern unsafe nuint llama_state_seq_get_data_ext(SafeLLamaContextHandle ctx, byte* dst, nuint size, LLamaSeqId seq_id, uint flags);
+
+        /// <summary>
+        /// Set sequence state data with extended flags
+        /// </summary>
+        [DllImport(libraryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern unsafe nuint llama_state_seq_set_data_ext(SafeLLamaContextHandle ctx, byte* src, nuint size, LLamaSeqId dest_seq_id, uint flags);
+
+        /// <summary>
         /// Set whether to use causal attention or not. If set to true, the model will only attend to the past tokens
         /// </summary>
         [DllImport(libraryName, CallingConvention = CallingConvention.Cdecl)]
@@ -198,6 +225,13 @@ namespace LLama.Native
         /// <param name="ctx"></param>
         [DllImport(libraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void llama_print_timings(SafeLLamaContextHandle ctx);
+
+        /// <summary>
+        /// Print a breakdown of per-device memory use
+        /// </summary>
+        /// <param name="ctx"></param>
+        [DllImport(libraryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void llama_memory_breakdown_print(SafeLLamaContextHandle ctx);
 
         /// <summary>
         /// Print system information
@@ -380,5 +414,13 @@ namespace LLama.Native
         /// <returns>Name of the buffer type</returns>
         [DllImport(ggmlBaseLibraryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr ggml_backend_buft_name(IntPtr buft);
+
+        /// <summary>
+        /// Get the name of a flash attention type
+        /// </summary>
+        /// <param name="flash_attn_type">Flash attention type</param>
+        /// <returns>Name of the flash attention type</returns>
+        [DllImport(libraryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr llama_flash_attn_type_name(LLamaFlashAttnType flash_attn_type);
     }
 }

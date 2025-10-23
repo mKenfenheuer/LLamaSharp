@@ -112,6 +112,16 @@ namespace LLama.Native
         private sbyte _use_extra_bufts;
 
         /// <summary>
+        /// bypass host buffer allowing extra buffers to be used
+        /// </summary>
+        public bool no_host
+        {
+            readonly get => Convert.ToBoolean(_no_host);
+            set => _no_host = Convert.ToSByte(value);
+        }
+        private sbyte _no_host;
+
+        /// <summary>
         /// Create a LLamaModelParams with default values
         /// </summary>
         /// <returns></returns>
