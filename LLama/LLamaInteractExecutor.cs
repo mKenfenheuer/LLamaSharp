@@ -234,7 +234,7 @@ namespace LLama
                 args.WaitForInput = true;
             }
 
-            return Task.FromResult((true, (IReadOnlyList<string>)[]));
+            return Task.FromResult((args.WaitForInput, (IReadOnlyList<string>)[]));
         }
 
         /// <inheritdoc />
